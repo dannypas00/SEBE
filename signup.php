@@ -65,7 +65,6 @@
         }
     ?>
     <body>
-    	<h1>Testing Fase</h1>
         <h1>Sign Up</h1>
         <h4> Create an account</h4> 
             <form action ="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
