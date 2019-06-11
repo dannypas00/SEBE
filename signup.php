@@ -24,7 +24,7 @@
             }
         }
         
-        
+        #Creates a new account by sending the giving data to the database
         function newAccount($conn,$u,$p){
             try{
                 //$prep = $conn->prepare(""); //TODO check for duplicate username
@@ -42,6 +42,7 @@
             }
         }
         
+        #Checks if the given name corresponds with an existing name in the databse
         function accountExists($conn,$u) {
             try {
                 $prep = $conn->prepare("SELECT Count(username) AS Count FROM user WHERE username = :user;");
