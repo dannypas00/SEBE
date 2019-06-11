@@ -27,34 +27,34 @@
 		}
 	}
 
-    function login($conn,$user,$pass){
-        global $admin;
-        $pass = hash("sha256",$pass); //simpele hash functie zonder salt      
-        try{
-            $res = $conn->prepare("SELECT * FROM user WHERE username=:un AND pass=:p;");
-            $res -> bindParam(':p', $user);
-            $res -> bindParam(':p', hash("sha256",$pass));
-            $res -> execute();
-            $row = $res->fetch();
-            if($row){
-                $_SESSION['user'] = $row[1];
-                $res = null;
-                $conn = null; 
-                if($row[1] === $admin){          
-                    header("location: admin.php");
-                    exit();
-                }
-                else {
-                    header("location: index.php");
-                    exit();
-                }
-            }
-            else{
-                echo "Username or password invalid!"; 
-            }
-        }
-        catch(PDOException $e){
-            echo "Login error";
-        }
-    }
+	function login($conn,$user,$pass){
+	    global $admin;
+	    $pass = hash("sha256",$pass); //simpele hash functie zonder salt
+	    try{
+	        $res = $conn->prepare("SELECT * FROM user WHERE username=:un AND pass=:p;");
+	        $res -> bindParam(':un', $user);
+	        $res -> bindParam(':p', $pass);
+	        $res -> execute();
+	        $row = $res->fetch();
+	        if($row){
+	            $_SESSION['user'] = $row[1];    //Fills session with username
+	            $res = null;
+	            $conn = null;
+	            if($row[1] === $admin){
+	                header("location: admin.php");
+	                exit();
+	            }
+	            else {
+	                header("location: index.php");
+	                exit();
+	            }
+	        }
+	        else{
+	            echo "Username or password invalid!";
+	        }
+	    }
+	    catch(PDOException $e){
+	        echo "Login error";
+	    }
+	}
 ?>
