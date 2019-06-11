@@ -5,9 +5,10 @@
     include("includes/head.php");
     include("includes/basket.php");
     $form = '<form action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="POST">
-            <p>Change your password:</p>
+            <p>Enter the new password:</p>
             <input type="password" name="pass" class="form">
-            <input type="hidden" name="user" value="'. (isset($_SESSION["user"])? $_SESSION["user"]: "") .'">
+            <p>Enter the new password again:</p>
+            <input type="password" name="pass" class="form">
             <span class="input-group-btn">
                 <button class="btn btn-primary" type="submit">Change</button>
             </span>
@@ -15,16 +16,48 @@
     if($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['pass'])){
         try{
             $conn = setupDb($dbhost,$dbUpdateUsername,$dbUpdatePassword);
-            $prep = $conn->prepare("UPDATE user SET pass=:p WHERE username=:un;");
-            $prep -> bindParam(':p',hash("sha256",$_POST['pass']));
-            $prep -> bindParam(':un',$_POST['user']);
-            $prep->execute();
-            $prep = null;$conn = null;
-            header("location: index.php");
-            exit;
+            $pass = hash("sha256",$_POST['pass']);
+            //if (changePass($conn,$pass,) === true)
+            //{
+                $prep = $conn->prepare("UPDATE user SET pass=:p WHERE username=:un;");
+                $prep -> bindParam(':p',$pass);
+                $prep -> bindParam(':un',$_SESSION['user']);
+                $prep->execute();
+                $prep = null;$conn = null;
+                header("location: account.php");
+                exit;
+            //}
         }
         catch(PDOException $e){
             //echo $e->getMessage(); debug
+        }
+    }
+    function changePass($conn,$pass,$new_pass){
+        global $admin;
+        $new_pass = hash("sha256",$pass);
+        try{
+            $res = $conn->prepare("SELECT * FROM user WHERE username=:un AND pass=:p;");
+            $res -> bindParam(':un', $_SESSION['user']);
+            $res -> bindParam(':p', $pass);
+            $res -> execute();
+            $row = $res->fetch();
+            if($row){
+                $res = $conn->prepare("UPDATE user SET pass = :np WHERE username=:un AND pass=:p;");
+                $res -> bindParam(':np', $new_pass);
+                $res -> bindParam(':un', $_SESSION['user']);
+                $res -> bindParam(':p', $pass);
+                $res = null;
+                $conn = null;
+                return true;
+            }
+            else{
+                echo "Username or password invalid!";
+                return false;
+                header("location: account.php");
+            }
+        }
+        catch(PDOException $e){
+            echo "Login error";
         }
     }
 ?>
