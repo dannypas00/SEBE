@@ -8,7 +8,7 @@
                 }
                 if (!accountExists($conn, $_POST["user"])) {
                     if(newAccount($conn,$_POST["user"],$_POST["pass"])){
-                        echo "Succesfull account creation";
+                        echo "Succesful account creation";
                         header("location: index.php");
                     }
                     else{
