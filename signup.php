@@ -2,19 +2,25 @@
     <?php
         include("dbConfig.php");
         if ($_SERVER["REQUEST_METHOD"] == "POST"){
-            if($conn == null){
-                $conn = setupDB($dbhost,$dbInsertUsername,$dbInsertPassword);
-            }
-            if (accountExists($conn, $_POST["user"]) == false) {
-                if(newAccount($conn,$_POST["user"],$_POST["pass"])){
-                    echo "Succesfull account creation";
+            if ($_POST["user"] != null and $_POST["pass"] != null ) {
+                if($conn == null){
+                    $conn = setupDB($dbhost,$dbInsertUsername,$dbInsertPassword);
                 }
-                else{
-                    echo "failed to create account";
+                if (!accountExists($conn, $_POST["user"])) {
+                    if(newAccount($conn,$_POST["user"],$_POST["pass"])){
+                        echo "Succesfull account creation";
+                        header("location: index.php");
+                    }
+                    else{
+                        echo "failed to create account";
+                    }
+                }
+                else {
+                    echo "accountname already exists";
                 }
             }
             else {
-                echo "accountname already exists";
+                echo "please fill in both textboxes";
             }
         }
         
@@ -22,7 +28,7 @@
         function newAccount($conn,$u,$p){
             try{
                 //$prep = $conn->prepare(""); //TODO check for duplicate username
-                $prep = $conn->prepare("INSERT INTO user (username,pass) VALUES(:user,:pass)");
+                $prep = $conn->prepare("INSERT INTO user (username,pass) VALUES(:user,:pass);");
                 $prep->bindParam(':user',$u);
                 $prep->bindParam(':pass',hash("sha256",$p)); //simpele hash zonder salt
                 $prep->execute();
@@ -38,14 +44,13 @@
         
         function accountExists($conn,$u) {
             try {
-                $prep = $conn->prepare("SELECT username FROM user WHERE username = :user");
+                $prep = $conn->prepare("SELECT Count(username) AS Count FROM user WHERE username = :user;");
                 $prep->bindParam(':user', $u);
                 $prep->execute();
-                $num_rows = $prep->fetch(PDO::FETCH_ASSOC);
-                echo $user;
+                $count = $prep->fetch();
                 $prep = null;
                 $conn = null;
-                if ($num_rows === null) {
+                if ($count[0] == 0) {
                     return false;
                 }
                 else {
