@@ -53,7 +53,8 @@
                         }
                         
                       } catch (Exception $e) {
-                        echo "<div>SQL Foutmelding: " . $e->getMessage();
+                        //echo "<div>SQL Foutmelding: " . $e->getMessage();
+                          echo "<div> Oeps! er is iets mis gegaan.</div>"; 
                       }
                     }//if $_POST parameters present
                     else{
