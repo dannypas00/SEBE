@@ -1,5 +1,5 @@
 ﻿<?php 
-$logInOut = (isset($_SESSION['user'])? '<li style="color: #eeeeee;"><a href="account.php" id="userLoggedIn">Welcome: '.$_SESSION['user'].'</a></li><li><a href="logout.php" id="log" data-toggle="modal" data-target="#login-modal">Logout</a></li>' : '<li><a href="#" data-toggle="modal" id="log" data-target="#login-modal">Login</a></li>');
+$logInOut = (isset($_SESSION['user'])? '<li style="color: #eeeeee;"><a href="account.php" id="userLoggedIn">Welcome: '.filter_var($_SESSION['user'], FILTER_SANITIZE_STRING).'</a></li><li><a href="logout.php" id="log" data-toggle="modal" data-target="#login-modal">Logout</a></li>' : '<li><a href="#" data-toggle="modal" id="log" data-target="#login-modal">Login</a></li>');
 echo'
     <div id="top">
         <div class="container">
