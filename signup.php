@@ -6,17 +6,22 @@
                 if($conn == null){
                     $conn = setupDB($dbhost,$dbInsertUsername,$dbInsertPassword);
                 }
-                if (!accountExists($conn, $_POST["user"])) {
-                    if(newAccount($conn,$_POST["user"],$_POST["pass"])){
-                        echo "Succesful account creation";
-                        header("location: index.php");
+                if (username_Is_Allowed($_POST["user"])) {
+                    if (!accountExists($conn, $_POST["user"])) {
+                        if(newAccount($conn,$_POST["user"],$_POST["pass"])){
+                            echo "Succesful account creation";
+                            header("location: index.php");
+                        }
+                        else{
+                            echo "failed to create account";
+                        }
                     }
-                    else{
-                        echo "failed to create account";
+                    else {
+                        echo "accountname already exists";
                     }
                 }
                 else {
-                    echo "accountname already exists";
+                    echo "username contained an invalid character combination";
                 }
             }
             else {
@@ -63,6 +68,14 @@
                 return;
             }
         }
+        
+        function username_Is_Allowed($u) {
+            $u_sanitized = filter_var($u, FILTER_SANITIZE_STRING, FILTER_SANITIZE_MAGIC_QUOTES);
+            if ($u_sanitized === $u) {
+                return true;
+            }
+            return false;
+        }
     ?>
     <body>
         <h1>Sign Up</h1>
@@ -70,7 +83,7 @@
             <form action ="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
                 User: <input type="text" name="user"><br>
                 Password: <input type="password" name="pass"><br>
-                <input type="submit">
+                <input type="submit" value="Sign Up">
             </form>
     </body>
 </html>
