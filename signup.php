@@ -9,7 +9,7 @@
                 if (username_Is_Allowed($_POST["user"])) {
                     if (!accountExists($conn, $_POST["user"])) {
                         if(newAccount($conn,$_POST["user"],$_POST["pass"])){
-                            echo "Succesful account creation";
+                            echo "successful account creation";
                             header("location: index.php");
                         }
                         else{
@@ -69,6 +69,7 @@
             }
         }
         
+        #Checks if username contains potentially dangerous characters
         function username_Is_Allowed($u) {
             $u_sanitized = filter_var($u, FILTER_SANITIZE_STRING, FILTER_SANITIZE_MAGIC_QUOTES);
             if ($u_sanitized === $u) {
