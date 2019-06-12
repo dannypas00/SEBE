@@ -4,6 +4,8 @@
     include("login.php");
     include("includes/head.php");
     include("includes/basket.php");
+    include("includes/loggedin.php");
+    isLoggedIn();
     $form = '<form action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="POST">
             <p>Change your password:</p>
             <input type="password" name="pass" class="form">
