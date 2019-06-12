@@ -1,4 +1,7 @@
 ﻿<?php 
+# logInOut:
+# If the user is logged in displays the user details with a logout option
+# If the user is logged out displays a login option
 $logInOut = (isset($_SESSION['user'])? '<li style="color: #eeeeee;"><a href="account.php" id="userLoggedIn">Welcome: '.$_SESSION['user'].'</a></li><li><a href="logout.php" id="log" data-toggle="modal" data-target="#login-modal">Logout</a></li>' : '<li><a href="#" data-toggle="modal" id="log" data-target="#login-modal">Login</a></li>');
 echo'
     <div id="top">
