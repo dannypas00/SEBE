@@ -9,7 +9,7 @@
                 if (username_Is_Allowed($_POST["user"])) {
                     if (!accountExists($conn, $_POST["user"])) {
                         if(newAccount($conn,$_POST["user"],$_POST["pass"])){
-                            echo "Succesful account creation";
+                            echo "successful account creation";
                             header("location: index.php");
                         }
                         else{
@@ -29,7 +29,7 @@
             }
         }
         
-        #Creates a new account by sending the giving data to the database
+        //Creates a new account by sending the giving data to the database
         function newAccount($conn,$u,$p){
             try{
                 //$prep = $conn->prepare(""); //TODO check for duplicate username
@@ -47,7 +47,7 @@
             }
         }
         
-        #Checks if the given name corresponds with an existing name in the databse
+        //Checks if the given name corresponds with an existing name in the database
         function accountExists($conn,$u) {
             try {
                 $prep = $conn->prepare("SELECT Count(username) AS Count FROM user WHERE username = :user;");
@@ -69,6 +69,7 @@
             }
         }
         
+        //Checks if the given username contains any potentially dangerous characters
         function username_Is_Allowed($u) {
             $u_sanitized = filter_var($u, FILTER_SANITIZE_STRING, FILTER_SANITIZE_MAGIC_QUOTES);
             if ($u_sanitized === $u) {
