@@ -10,7 +10,7 @@ $VERSION = include('version.php');
                         <ul>        
                             <li><a href="about.php">About us</a>
                             </li>
-                            <li><a href="termsofuse.php?file=terms.txt">Terms and conditions</a>
+                            <li><a href="termsofuse.php">Terms and conditions</a>
                             </li>
                             <li><a href="faq.php">FAQ</a>
                             </li>

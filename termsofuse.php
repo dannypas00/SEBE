@@ -20,19 +20,20 @@ include("includes/head.php");
                     <div class="col-md-11">
                         <h2>Terms of use</h2>
                         <?php
-                            $url = $_SERVER['REQUEST_URI'];
-                            if ((strpos($url,"file")&&(strpos($url,".txt")) !== false)) {
-                               if (file_exists((string)($_GET['file']))){
-                                   $test = file_get_contents($_GET['file']);
-                                   echo "<pre>$test</pre>";
+                        //direct laden van tekst bestand
+                        $termstext = file_get_contents("terms.txt");
+                        
+                        //als bestand bestaat dan laten zien, anders zeggen dat bestand niet bestaat.
+                        if (file_exists("terms.txt"))
+                               {
+                                   
+                                   echo "<pre>$termstext</pre>";
                                }
                                else {
                                    echo "<strong>file does not exist</strong>";
                                }
-                            }
-                            else{
-                                echo "<strong>couldn't find .txt file</strong>";
-                            }
+                            
+                            
                         ?>
         </div>
     </div>
