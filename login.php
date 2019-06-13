@@ -26,6 +26,9 @@
 			login($conn,$user,$pass);
 		}
 	}
+	else {     //Regenerate the session ID every time the login.php page is included and a session is already active
+	    session_regenerate_id(TRUE);
+	}
 
 	function login($conn,$user,$pass){
 	    global $admin;

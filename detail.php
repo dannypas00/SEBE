@@ -43,7 +43,7 @@
 			}
         }
         else{
-            echo "<h2>No item found with this id..</h><br>";
+            echo "<h2>No item found with this id..</h2><br>";
         }
         $stmt = null;
         $conn = null;
@@ -144,6 +144,7 @@
                 </div>
             </div>
         </div>
+	</div>
         <?php 
             include("includes/footer.php");  
             include("includes/copyright.php");
