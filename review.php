@@ -11,7 +11,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user'])){
             $prep = $conn->prepare("INSERT INTO review (product_id,user_id,reviewText) VALUES(:id,:userid,:txt)");
             $prep->bindParam(':id',$_GET['id']);
             $prep->bindParam(':userid',nameToUserID($_SESSION['user'],setupDB($dbhost,$dbSelectUsername,$dbSelectPassword)));
-            $prep->bindParam(':txt',$_POST['review']);
+            $sreviewtext = filter_var($_POST['review'], FILTER_SANITIZE_STRING); //sanitizing van de string
+            $prep->bindParam(':txt',$sreviewtext);
             $prep->execute();
             $prep = null;
             $conn = null;
