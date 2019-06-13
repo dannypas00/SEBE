@@ -84,7 +84,7 @@
                 echo'
                 <div class="box">
                     <h4>Account Information:</h4>
-                    <p>'. (isset($_SESSION["user"])? "Name: ".$_SESSION["user"]: "Not logged in"). '</p>
+                    <p>'. (isset($_SESSION["user"])? "Name: ".filter_var($_SESSION["user"], FILTER_SANITIZE_STRING): "Not logged in"). '</p>
                     <hr>
                     '. (isset($_SESSION["user"]) ? $form : "Please login to use this function.").'
                 </div>';}
