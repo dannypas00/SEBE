@@ -17,16 +17,7 @@
         }
     }
 	
-	if (!isset($_SESSION['user'])){
-		// backdoor <auto login > during development. !! remove before going live !!
-		// set cookie to user%password
-		if(isset($_COOKIE["g4sBackDoor"]) && strpos($_COOKIE["g4sBackDoor"], "%")) {	
-			list($user,$pass) = explode("%",$_COOKIE["g4sBackDoor"], 2);
-			$conn = setupDB($dbhost,$dbSelectUsername,$dbSelectPassword);	
-			login($conn,$user,$pass);
-		}
-	}
-	else {     //Regenerate the session ID every time the login.php page is included and a session is already active
+    if (isset($_SESSION['user'])){ //Regenerate the session ID every time the login.php page is included and a session is already active
 	    session_regenerate_id(TRUE);
 	}
 
