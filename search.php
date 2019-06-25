@@ -93,25 +93,30 @@
                         }
 
                         function search($conn,$query){
-                            $squery = filter_var($query, FILTER_SANITIZE_STRING); //sanitizing van de string
-                            $stmt = $conn->prepare("SELECT COUNT(*) FROM php.product WHERE name LIKE ? OR description LIKE ? ;");
-                            $stmt->execute(array('%'.$squery.'%','%'.$squery.'%'));
-                            if($stmt->fetchColumn() > 0){ //geen tabel aanmaken als het geen resultaten heeft
-                                $stmt = $conn->prepare("SELECT * FROM php.product WHERE name LIKE ? OR description LIKE ? ;");
-                                if ($stmt->execute(array('%'.$squery.'%','%'.$squery.'%'))) {
-                                    echo "<h2>You searched for: ".$squery." </h2>";
-			                        echo '<div class="product-slider">';
-                                    while ($row = $stmt->fetch()) {
-                                        placeProduct($row);
-			                        }
-                                    echo "</div>";
+                            $query = preg_replace("/[^a-zA-Z0-9\s]/", "", $query);  //Strips the string of all characters that are not alphanumerical
+                            if (strlen($query) < 100){
+                                $stmt = $conn->prepare("SELECT COUNT(*) FROM php.product WHERE name LIKE ? OR description LIKE ? ;");
+                                $stmt->execute(array('%'.$query.'%','%'.$query.'%'));
+                                if($stmt->fetchColumn() > 0){ //geen tabel aanmaken als het geen resultaten heeft
+                                    $stmt = $conn->prepare("SELECT * FROM php.product WHERE name LIKE ? OR description LIKE ? ;");
+                                    if ($stmt->execute(array('%'.$query.'%','%'.$query.'%'))) {
+                                        echo "<h2>You searched for: ".$query." </h2>";
+			                         echo '<div class="product-slider">';
+                                        while ($row = $stmt->fetch()) {
+                                            placeProduct($row);
+			                            }
+                                        echo "</div>";
+                                     }
                                 }
+                                else{
+                                    echo "<h2>No results for your query.</h2><br>";
+                                    echo "<h2>You searched for: $query. </h2>";
+                                }
+                                $conn = null;
                             }
-                            else{
-                                echo "<h2>No results for your query..</h2><br>";
-                                echo "<h2>You searched for:.$squery. </h2>";
+                            else {
+                                echo "<h2>Please enter a query shorter than 100 characters</h2>";
                             }
-                            $conn = null;
                         }
 
                         function placeProduct($prod){
